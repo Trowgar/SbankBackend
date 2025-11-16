@@ -29,15 +29,15 @@ cd vercel_backend
 vercel
 ```
 
-### Шаг 4: Добавь Vercel KV базу данных
+### Шаг 4: Добавь Upstash Redis базу данных
 
 1. Перейди на https://vercel.com/dashboard
 2. Выбери свой проект
 3. Перейди в раздел **Storage**
 4. Нажми **Create Database**
-5. Выбери **KV (Redis)**
-6. Введи имя: `swedbank-kv`
-7. Нажми **Create**
+5. Выбери **Upstash** → **Upstash for Redis**
+6. Нажми **Continue** и авторизуй Upstash
+7. Создай новую Redis базу (имя: `swedbank-kv`)
 8. Vercel автоматически добавит переменные окружения:
    - `KV_URL`
    - `KV_REST_API_URL`
@@ -74,13 +74,13 @@ npm run dev
 
 Сервер запустится на http://localhost:3001
 
-## Бесплатный Hobby лимит
+## Бесплатный лимит (Upstash Redis)
 
-Vercel KV бесплатен для Hobby плана:
-- 1 база данных
-- 30,000 запросов/месяц
-- 256 MB хранилище
-- 256 MB трафик/месяц
+Upstash Redis бесплатный tier:
+- 10,000 команд в день
+- 256 MB хранилище данных
+- Serverless архитектура
+- Автоматическое масштабирование
 
 ## API Endpoints
 
