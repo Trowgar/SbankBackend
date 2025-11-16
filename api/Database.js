@@ -1,38 +1,44 @@
-const fs = require('fs').promises;
-const path = require('path');
+const { kv } = require('@vercel/kv');
 
 class Database {
   constructor() {
-    this.dbFile = path.join(__dirname, '../data/bankData.json');
+    this.dbKey = 'swedbank:data';
   }
 
   async ensureDatabaseExists() {
-    try {
-      await fs.access(this.dbFile);
-    } catch {
+    const exists = await kv.exists(this.dbKey);
+    if (!exists) {
       const defaultData = {
-        balance: 0.00,
-        monthlySpend: 0.00,
+        balance: 2105.37,
+        monthlySpend: 449.82,
         transactions: []
       };
       await this.writeData(defaultData);
+      console.log('Database initialized with default data');
     }
   }
 
   async readData() {
     try {
-      const jsonData = await fs.readFile(this.dbFile, 'utf8');
-      return JSON.parse(jsonData);
+      const data = await kv.get(this.dbKey);
+      return data || {
+        balance: 0,
+        monthlySpend: 0,
+        transactions: []
+      };
     } catch (error) {
       console.error('Error reading database:', error);
-      return null;
+      return {
+        balance: 0,
+        monthlySpend: 0,
+        transactions: []
+      };
     }
   }
 
   async writeData(data) {
     try {
-      const jsonData = JSON.stringify(data, null, 2);
-      await fs.writeFile(this.dbFile, jsonData, 'utf8');
+      await kv.set(this.dbKey, data);
       return true;
     } catch (error) {
       console.error('Error writing database:', error);
